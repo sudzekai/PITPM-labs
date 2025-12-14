@@ -9,6 +9,6 @@ namespace LabWork10_Library
         private static partial Regex PasswordRegex();
 
         public static bool IsValidPassword(this string password)
-            => PasswordRegex().IsMatch(password);
+            => string.IsNullOrEmpty(password) ? false : PasswordRegex().IsMatch(password);
     }
 }
