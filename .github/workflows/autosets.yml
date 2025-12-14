@@ -1,0 +1,44 @@
+name: .NET Regression Tests
+
+on:		# Запускается при push и pull request файлов .cs в ветку master
+  push:
+    branches: [ "master" ]
+    paths:
+      - '**.cs'
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - '**.cs'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # ОС виртуальной машины
+
+steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4 # Клонирование репозитория на ВМ
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # Установка .NET 8 на ВМ
+
+    - name: Restore dependencies
+      run: dotnet restore 		# Восстановление зависимостей
+
+    - name: Build solution		# Построение решения
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Run tests			# Запуск тестов
+      run: dotnet test --no-build --configuration Release --verbosity normal
+
+    - name: Run tests and generate TRX log  # Запуск тестов
+      run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
+
+    - name: Test Report		# Сохранение отчета
+      uses: dorny/test-reporter@v2
+      if: success() || failure() # запускает этот шаг в любом случае
+      with:
+        name: Test results  
+        path: "**/*.trx"    # Путь сохранения результатов теста
+        reporter: dotnet-trx   # Формат результата
