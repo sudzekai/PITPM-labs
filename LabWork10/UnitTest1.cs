@@ -10,6 +10,7 @@ namespace LabWork10
         public void IsValidPassword_Good(string password)
             => Assert.True(password.IsValidPassword());
 
+
         [Theory]
         [InlineData("abc")]
         [InlineData("омфгхелло")]
