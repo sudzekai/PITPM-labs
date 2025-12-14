@@ -2,11 +2,11 @@ name: .NET Regression Tests
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     paths:
       - '**.cs'
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
     paths:
       - '**.cs'
 
