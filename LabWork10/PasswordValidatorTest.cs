@@ -2,7 +2,7 @@
 
 namespace LabWork10
 {
-    public class UnitTest1
+    public class PasswordValidatorTest
     {
         [Theory]
         [InlineData("password1")]
