@@ -3,7 +3,6 @@ using Moq;
 using OrderProcessing.Interfaces;
 using OrderProcessing.Models;
 using OrderProcessing.Services;
-using System.Runtime.InteropServices;
 
 namespace LabWork7
 {
@@ -15,15 +14,13 @@ namespace LabWork7
 
         private readonly OrderService _orderService;
 
-        public OrderProcessingTester()
-        {
+        public OrderProcessingTester() =>
             _orderService = new
                 (
                     _ordersMock.Object,
                     _customersMock.Object,
                     _busMock.Object
                 );
-        }
 
         //CreateOrder если юзер есть
         [Fact]
@@ -35,7 +32,7 @@ namespace LabWork7
                           .ReturnsAsync(new Customer { Id = customerId });
 
             var order = await _orderService.CreateOrderAsync(customerId, 3000);
-            
+
             order.CustomerId.Should().Be(customerId);
             order.TotalAmount.Should().Be(3000);
 
@@ -163,7 +160,7 @@ namespace LabWork7
             _ordersMock.Setup(o => o.GetByIdAsync(It.IsAny<Guid>()))
                        .ReturnsAsync((Order)null);
 
-            Func<Task> act = async () => 
+            Func<Task> act = async () =>
                 await _orderService.ShipOrderAsync(It.IsAny<Guid>());
 
             await act.Should().ThrowAsync<InvalidOperationException>()
